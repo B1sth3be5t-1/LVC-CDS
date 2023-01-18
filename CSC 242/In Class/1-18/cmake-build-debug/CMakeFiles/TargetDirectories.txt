@@ -1,0 +1,3 @@
+/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-18/cmake-build-debug/CMakeFiles/1_18.dir
+/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-18/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-18/cmake-build-debug/CMakeFiles/rebuild_cache.dir
