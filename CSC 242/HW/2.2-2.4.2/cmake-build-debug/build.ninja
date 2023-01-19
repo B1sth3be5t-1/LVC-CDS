@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_2_2_2_4_2: phony || CMakeFiles/2_2_2_4_2
 
 build CMakeFiles/2_2_2_4_2.dir/main.cpp.obj: CXX_COMPILER__2_2_2_4_2_Debug C$:/Users/Brian$ Myers/OneDrive$ -$ Lebanon$ Valley$ College/LVC$ work/CDS$ work/LVC-CDS/CSC$ 242/HW/2.2-2.4.2/main.cpp || cmake_object_order_depends_target_2_2_2_4_2
   DEP_FILE = CMakeFiles\2_2_2_4_2.dir\main.cpp.obj.d
-  FLAGS = -g -fdiagnostics-color=always
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
   OBJECT_DIR = CMakeFiles\2_2_2_4_2.dir
   OBJECT_FILE_DIR = CMakeFiles\2_2_2_4_2.dir
   TARGET_COMPILE_PDB = CMakeFiles\2_2_2_4_2.dir\
