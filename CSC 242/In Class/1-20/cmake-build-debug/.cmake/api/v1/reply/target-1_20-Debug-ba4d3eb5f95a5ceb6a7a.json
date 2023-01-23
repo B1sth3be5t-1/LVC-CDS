@@ -2,10 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "2_2_2_4_2.exe"
-		},
-		{
-			"path" : "2_2_2_4_2.pdb"
+			"path" : "1_20"
 		}
 	],
 	"backtrace" : 1,
@@ -39,9 +36,6 @@
 			[
 				{
 					"fragment" : "-g -fdiagnostics-color=always"
-				},
-				{
-					"fragment" : "-std=gnu++14"
 				}
 			],
 			"language" : "CXX",
@@ -51,7 +45,7 @@
 				[
 					1
 				],
-				"standard" : "14"
+				"standard" : "17"
 			},
 			"sourceIndexes" : 
 			[
@@ -59,7 +53,7 @@
 			]
 		}
 	],
-	"id" : "2_2_2_4_2::@6890427a1f51a3e7e1df",
+	"id" : "1_20::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -71,16 +65,12 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
-				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
-	"name" : "2_2_2_4_2",
-	"nameOnDisk" : "2_2_2_4_2.exe",
+	"name" : "1_20",
+	"nameOnDisk" : "1_20",
 	"paths" : 
 	{
 		"build" : ".",

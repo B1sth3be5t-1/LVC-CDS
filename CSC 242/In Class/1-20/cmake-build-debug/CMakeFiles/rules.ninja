@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: 2_2_2_4_2
+# Project: 1_20
 # Configurations: Debug
 # =============================================================================
 # =============================================================================
@@ -14,7 +14,7 @@
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__2_2_2_4_2_Debug
+rule CXX_COMPILER__1_20_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = /usr/lib64/ccache/c++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -24,7 +24,7 @@ rule CXX_COMPILER__2_2_2_4_2_Debug
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__2_2_2_4_2_Debug
+rule CXX_EXECUTABLE_LINKER__1_20_Debug
   command = $PRE_LINK && /usr/lib64/ccache/c++ $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /opt/clion/clion-2022.3.1/bin/cmake/linux/bin/cmake --regenerate-during-build -S"/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/HW/2.2-2.4.2" -B"/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/HW/2.2-2.4.2/cmake-build-debug"
+  command = /opt/clion/clion-2022.3.1/bin/cmake/linux/bin/cmake --regenerate-during-build -S"/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-20" -B"/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-20/cmake-build-debug"
   description = Re-running CMake...
   generator = 1
 

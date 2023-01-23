@@ -1,4 +1,4 @@
-# Install script for directory: /home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/HW/2.2-2.4.2
+# Install script for directory: /home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-20
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/HW/2.2-2.4.2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-20/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

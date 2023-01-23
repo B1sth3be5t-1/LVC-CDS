@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.24"
@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "2_2_2_4_2",
+					"name" : "1_20",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "2_2_2_4_2::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-2_2_2_4_2-Debug-b3a8e2327cee60c81340.json",
-					"name" : "2_2_2_4_2",
+					"id" : "1_20::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-1_20-Debug-ba4d3eb5f95a5ceb6a7a.json",
+					"name" : "1_20",
 					"projectIndex" : 0
 				}
 			]
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/Brian Myers/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 242/HW/2.2-2.4.2/cmake-build-debug",
-		"source" : "C:/Users/Brian Myers/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 242/HW/2.2-2.4.2"
+		"build" : "/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-20/cmake-build-debug",
+		"source" : "/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 242/In Class/1-20"
 	},
 	"version" : 
 	{
