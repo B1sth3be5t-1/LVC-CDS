@@ -68,11 +68,28 @@ public:
         k1->parent = k2->parent;
         //reset k2 parent to k1 as now k1 is root of this new AVL tree
         k2->parent = k1;
+    }
 
+    bool is_balanced() {
+        bool isBal = true;
+        privBalance(root, isBal);
+        return isBal;
+    }
 
-
+private:
+    void privBalance(AvlNode* n, bool& isBal) {
+        if (!isBal) return;
+        if (n == nullptr) return;
+        if (abs(height(n->left) - height(n->right)) > 1) {
+            isBal = false;
+            return;
+        }
+        is_balanced(n->left, isBal);
+        is_balanced(n->right, isBal);
 
     }
+
+    AvlNode* root;
 };
 
 #endif //INC_4_4_AVLTREE_H
