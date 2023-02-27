@@ -37,6 +37,11 @@ int main( )
         9) 4199
      */
 
+    //Pt. 2:
+    //line 57 tells us that once we hit size/2, we need to rehash. To change the load factor, we need to divide the
+    //constant that we divide by, for example, a load factor of 1 means we divide by 1, a load factor of 2 means
+    //divide by .5, and so on.
+
     HashTable<int> h1;
     HashTable<int> h2;
 
