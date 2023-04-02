@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <iostream>
+#include <map>
 
 class Graph {
 public:
@@ -16,9 +17,8 @@ public:
     };
 
     void add_edge(int v1, int v2, double w = 1) {
-        edge* e = new edge(v1, v2, w);
-        vertices[v1]->edges.push_back(e);
-        if (!directed) vertices[v2]->edges.push_back(e);
+        vertices[v1]->edges.push_back(new edge(v1, v2, w));
+        if (!directed) vertices[v2]->edges.push_back(new edge(v2, v1, w));
     }
 
     void print_graph(std::ostream& o) {
@@ -29,6 +29,38 @@ public:
             o << std::endl;
         }
     }
+
+    std::vector<int> get_out_degrees() {
+        std::vector<int> v;
+        v.push_back(0);
+        for (int i = 1; i < vertices.size(); ++i)
+            v.push_back(vertices[i]->edges.size());
+        return v;
+    }
+
+    std::vector<int> get_in_degrees() {
+        if (!directed) return get_out_degrees();
+        std::map<int, int> m;
+        for (int i = 1; i < vertices.size(); ++i) {
+            for (int j = 0; j < vertices[i]->edges.size(); ++j)
+                ++m[vertices[i]->edges[j]->v2];
+        }
+
+        std::vector<int> v;
+        int c = 1;
+        for (auto it = m.cbegin(); it != m.cend(); ++it) {
+            if (it->first != c) v.push_back(0);
+            else v.push_back(it->second);
+            ++c;
+        }
+        while (c != vertices.size()) {
+            v.push_back(0);
+            ++c;
+        }
+
+        return v;
+    }
+
 
 private:
 
