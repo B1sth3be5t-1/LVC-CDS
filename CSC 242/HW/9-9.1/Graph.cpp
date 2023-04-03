@@ -3,6 +3,9 @@
 //
 
 #include "Graph.h"
+#include <algorithm>
+
+using namespace std;
 
 struct Graph::edge {
     edge(int v, int v2, double w) : v1{v}, v2{v2}, weight{w}
@@ -53,15 +56,26 @@ std::vector<int> Graph::get_in_degrees() {
     }
 
     std::vector<int> v;
-    int c = 0;
+    vector<pair<int, int>> pairs;
     for (auto it = m.cbegin(); it != m.cend(); ++it) {
-        if (it->first != c) v.push_back(0);
-        else v.push_back(it->second);
-        ++c;
+        pair<int, int> p {it->first, it->second};
+        pairs.push_back(p);
     }
-    while (c != vertices.size()) {
-        v.push_back(0);
+
+    sort(pairs.begin(), pairs.end(),
+              [](pair<int, int> a, pair<int, int> b){return a.first < b.first;});
+    int c = 0, extra = 0;
+    for (int i = 0; i < vertices.size() - extra; ) {
+        pair<int, int> it = pairs[i];
+        if (it.first != c) {
+            v.push_back(0);
+            ++c;
+            continue;
+            ++extra;
+        }
+        else v.push_back(it.second);
         ++c;
+        ++i;
     }
 
     return v;
@@ -78,7 +92,7 @@ std::vector<std::vector<double>> Graph::make_adjacency_matrix() {
 
     for (int v = 0; v < vertices.size(); ++v)
         for (int e = 0; e < vertices.size(); ++e)
-            if (map[v][e] == 0) map[v][e] = INT_MAX;
+            if (map[v][e] == 0) map[v][e] = INTMAX_MAX;
 
     return map;
 }

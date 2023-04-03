@@ -24,7 +24,6 @@ public:
     std::vector<std::vector<double>> make_adjacency_matrix();
 
 private:
-
     struct edge;
     struct vertex;
     std::vector<vertex*> vertices;

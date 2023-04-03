@@ -13,6 +13,7 @@ int main() {
     g.add_edge(4, 0, 10);
     g.add_edge(5, 0, 10);
     g.add_edge(6, 0, 10);
+    g.add_edge(2, 6, 100);
 
     g.print_graph(std::cout);
 
