@@ -1,85 +1,110 @@
-//
-// Created by Brian Myers on 4/2/23.
-//
+#include <vector>
+#include <iostream>
+#include <queue>
 
-#include "Graph.h"
+#include "graph.h"
 
-struct Graph::edge {
-    edge(int v, int v2, double w) : v1{v}, v2{v2}, weight{w}
-    {};
-    int v1, v2;
-    double weight;
-};
+using namespace std;
 
-struct Graph::vertex {
-    vertex(int i) : id{i}
-    {};
-    int id;
-    std::vector<edge*> edges;
-};
-
-Graph::Graph(int v, bool dir) : directed{dir} {
-    for (int i = 0; i < v; ++i)
-        vertices.push_back(new vertex(i));
-}
-
-void Graph::add_edge(int v1, int v2, double w = 1) {
-    vertices[v1]->edges.push_back(new edge(v1, v2, w));
-    if (!directed) vertices[v2]->edges.push_back(new edge(v2, v1, w));
-}
-
-void Graph::print_graph(std::ostream& o) {
-    for (int i = 0; i < vertices.size(); ++i) {
-        o << "Vertex: " << i << " is connected to: ";
-        for (int j = 0; j < vertices[i]->edges.size(); ++j)
-            o << vertices[i]->edges[j]->v2 << ", ";
-        o << std::endl;
+Graph::Graph(int sz, bool is_directed)
+        : graph(sz), directed(is_directed)
+{
+    for (int i = 0; i < graph.size(); ++i) {
+        graph[i].idx = i;
     }
 }
 
-std::vector<int> Graph::get_out_degrees() {
-    std::vector<int> v;
-    for (int i = 0; i < vertices.size(); ++i)
-        v.push_back(vertices[i]->edges.size());
-    return v;
+void Graph::add_edge(int src, int dest, double weight)
+{
+    graph[src].edges.push_back({src, dest, weight});
+    if (!directed) {
+        graph[dest].edges.push_back({dest, src, weight});
+    }
 }
 
-std::vector<int> Graph::get_in_degrees() {
-    if (!directed) return get_out_degrees();
-    std::map<int, int> m;
-    for (int i = 0; i < vertices.size(); ++i) {
-        for (int j = 0; j < vertices[i]->edges.size(); ++j)
-            ++m[vertices[i]->edges[j]->v2];
+void Graph::print_rep() const
+{
+    for (const auto& v: graph) {
+        cout << v.idx << ": ";
+        for (const auto& e: v.edges) {
+            cout << e.dest << "(" << e.w << ")" << " ";
+        }
+        cout << "\n";
     }
-
-    std::vector<int> v;
-    int c = 0;
-    for (auto it = m.cbegin(); it != m.cend(); ++it) {
-        if (it->first != c) v.push_back(0);
-        else v.push_back(it->second);
-        ++c;
-    }
-    while (c != vertices.size()) {
-        v.push_back(0);
-        ++c;
-    }
-
-    return v;
 }
 
-std::vector<std::vector<double>> Graph::make_adjacency_matrix() {
-    std::vector<std::vector<double>> map;
-    map.resize(vertices.size());
-    for (int v = 0; v < vertices.size(); ++v) {
-        map[v].resize(vertices.size());
-        for (int e = 0; e < vertices[v]->edges.size(); ++e)
-            map[v][vertices[v]->edges[e]->v2] = vertices[v]->edges[e]->weight;
+bool Graph::is_edge(int src, int dest) const
+{
+    for (const auto& e: graph[src].edges) {
+        if (e.dest == dest) {
+            return true;
+        }
     }
-
-    for (int v = 0; v < vertices.size(); ++v)
-        for (int e = 0; e < vertices.size(); ++e)
-            if (map[v][e] == 0) map[v][e] = INT_MAX;
-
-    return map;
+    return false;
 }
 
+std::vector<int> Graph::out_degree() const
+{
+    vector<int> ret(graph.size());
+
+    for (int i=0; i<graph.size(); ++i) {
+        ret[i] = graph[i].edges.size();
+    }
+    return ret;
+}
+
+std::vector<int> Graph::in_degree() const
+{
+    vector<int> ret(graph.size());
+
+    if (!directed)
+        return out_degree();
+
+    for (const auto& v: graph) {
+        for (const auto& e: v.edges) {
+            ++ret[e.dest];
+        }
+    }
+    return ret;
+}
+
+vector<int> Graph::top_sort() const {
+    std::vector<int> ret(graph.size());
+    int count = 0;
+    queue<vertex> q;
+
+    vector<int> in_degs = in_degree();
+    for (int i = 0; i < in_degs.size(); ++i)
+        if (in_degs[i] == 0)
+            q.push(graph[i]);
+
+    while (!q.empty()) {
+        vertex v = q.front();
+        q.pop();
+
+        ret[v.idx] = ++count;
+        for (auto& e : v.edges) {
+            vertex o = graph[e.dest];
+            if (--in_degs[o.idx] == 0)
+                q.push(o);
+        }
+    }
+
+    if (count != graph.size()) throw stderr;
+
+    return ret;
+
+
+    //for 9.1
+    // top sort is: s, G, D, A, B, H, E, I, F, C, t
+    //I looked at the graph and did this by hand. Remove a vertex with in-degree 0, delete all edges, and repeat.
+
+}
+
+Graph::edge::edge(int s, int d, double w)
+        : src{s}, dest{d}, w{w}
+{}
+
+Graph::vertex::vertex(int idx)
+        : idx{idx}
+{}

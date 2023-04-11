@@ -1,33 +1,42 @@
-//
-// Created by Brian Myers on 4/1/23.
-//
-
-#ifndef INC_9_9_1_GRAPH_H
-#define INC_9_9_1_GRAPH_H
+#ifndef GRAPHS_GRAPH_H
+#define GRAPHS_GRAPH_H
 
 #include <vector>
-#include <iostream>
-#include <map>
 
 class Graph {
 public:
-    Graph(int v, bool dir);
+    Graph(int sz, bool is_directed = true);
 
-    void add_edge(int v1, int v2, double w);
+    void add_edge(int src, int dest, double weight = 1.0);
 
-    void print_graph(std::ostream& o);
+    bool is_edge(int src, int dest) const;
 
-    std::vector<int> get_out_degrees();
+    std::vector<int> out_degree() const;
+    std::vector<int> in_degree() const;
 
-    std::vector<int> get_in_degrees();
+    void print_rep() const;
 
-    std::vector<std::vector<double>> make_adjacency_matrix();
+    std::vector<int> top_sort() const;
 
 private:
+    struct edge {
+        int src;
+        int dest;
+        double w;
 
-    struct edge;
-    struct vertex;
-    std::vector<vertex*> vertices;
+        edge(int s, int d, double w);
+    };
+
+    struct vertex {
+        int idx;
+        std::vector<edge> edges;
+
+        vertex(int idx = -1);
+    };
+
+private:
+    std::vector<vertex> graph;
     bool directed;
 };
-#endif //INC_9_9_1_GRAPH_H
+
+#endif //GRAPHS_GRAPH_H
