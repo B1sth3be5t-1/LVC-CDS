@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <queue>
+#include <tuple>
 
 #include "graph.h"
 
@@ -16,9 +17,9 @@ Graph::Graph(int sz, bool is_directed)
 
 void Graph::add_edge(int src, int dest, double weight)
 {
-    graph[src].edges.push_back({src, dest, weight});
+    graph[src].edges.emplace_back(src, dest, weight);
     if (!directed) {
-        graph[dest].edges.push_back({dest, src, weight});
+        graph[dest].edges.emplace_back(dest, src, weight);
     }
 }
 
@@ -68,37 +69,80 @@ std::vector<int> Graph::in_degree() const
     return ret;
 }
 
-vector<int> Graph::top_sort() const {
-    std::vector<int> ret(graph.size());
-    int count = 0;
-    queue<vertex> q;
+tuple<vector<int>, bool> Graph::top_sort() const
+{
+    // check pre-conditions?
+    if (!directed)
+        throw graph_exception();
 
-    vector<int> in_degs = in_degree();
-    for (int i = 0; i < in_degs.size(); ++i)
-        if (in_degs[i] == 0)
-            q.push(graph[i]);
+    auto indeg = in_degree();
 
-    while (!q.empty()) {
-        vertex v = q.front();
-        q.pop();
+    // find an initial list of in-degree 0 vertices
+    queue<int> next_up;
 
-        ret[v.idx] = ++count;
-        for (auto& e : v.edges) {
-            vertex o = graph[e.dest];
-            if (--in_degs[o.idx] == 0)
-                q.push(o);
+    for (int i=0; i<indeg.size(); ++i) {
+        if (indeg[i] == 0) {
+            next_up.push(i);
         }
     }
 
-    if (count != graph.size()) throw stderr;
+    vector<int> ts;
+
+    while (!next_up.empty()) {
+        auto next = next_up.front();
+        next_up.pop();
+        ts.push_back(next);
+        // for each outbound edge, reduce the in-deg
+        // of the destination by 1
+        for (const auto& e: graph[next].edges) {
+            if (--indeg[e.dest] == 0) {
+                next_up.push(e.dest);
+            }
+        }
+    }
+
+    return make_tuple(ts, ts.size() < graph.size());
+}
+
+vector<pair<int, int>> Graph::shortest_path(int v) const {
+    std::vector<pair<int, int>> ret(graph.size(), make_pair(-1, -1));
+    queue<int> q;
+
+    ret[v].first = 0;
+
+    q.push(v);
+
+    while (!q.empty()) {
+        int i = q.front();
+        q.pop();
+
+        for (const auto& e : graph[i].edges) {
+            if (ret[e.dest].first == -1) {
+                ret[e.dest].first = ret[i].first + 1;
+                ret[e.dest].second = i;
+                q.push(e.dest);
+            }
+
+        }
+    }
+
+
 
     return ret;
+    //returns a vector of pairs. The first element is the length from given vertex, the second is the previous vertex in the path.
+    //runtime: O(|E| + |V|)
+    //goes through every vertex, and loops through every edge once
 
-
-    //for 9.1
-    // top sort is: s, G, D, A, B, H, E, I, F, C, t
-    //I looked at the graph and did this by hand. Remove a vertex with in-degree 0, delete all edges, and repeat.
-
+    /*
+     * 9.5 b)
+     * Shortest path from B
+     * A - 3
+     * C - 1
+     * D - 2
+     * E - 1
+     * F - 2
+     * G - 1
+     */
 }
 
 Graph::edge::edge(int s, int d, double w)

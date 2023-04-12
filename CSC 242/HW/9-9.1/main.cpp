@@ -36,8 +36,7 @@ int main() {
 
     cout << endl;
 
-    vector<int> top = g.top_sort();
-    for (int i : top) cout << i << ", " << endl;
+
 
 
 
