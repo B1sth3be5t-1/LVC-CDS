@@ -1,7 +1,24 @@
 #include <iostream>
+#include <random>
 #include "Graph.h"
 
 using namespace std;
+
+//num vertices, random edges
+
+Graph random_graph(int n, int out, bool d) {
+    static random_device rd;
+    static default_random_engine re(rd());
+    static uniform_int_distribution<int> dist(0, n - 1);
+    Graph g(n, d);
+
+    for (int i = 0; i < n * out; ++i) {
+        auto u = dist(re);
+        auto v = dist(re);
+        g.add_edge(u, v);
+    }
+    return g;
+}
 
 int main() {
     Graph g{7, true};
@@ -36,7 +53,9 @@ int main() {
 
     cout << endl;
 
+    Graph rand = random_graph(10'000, 4, true);
 
+    rand.print_rep();
 
 
 
