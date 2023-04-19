@@ -4,7 +4,7 @@
 #include <tuple>
 #include <memory>
 
-#include "graph.h"
+#include "Graph.h"
 
 using namespace std;
 
@@ -18,6 +18,7 @@ Graph::Graph(int sz, bool is_directed)
 
 void Graph::add_edge(int src, int dest, double weight)
 {
+    if (src == dest || is_edge(src, dest)) return;
     graph[src].edges.emplace_back(src, dest, weight);
     if (!directed) {
         graph[dest].edges.emplace_back(dest, src, weight);
