@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include <tuple>
+#include <memory>
 
 #include "graph.h"
 
@@ -143,6 +144,43 @@ vector<pair<int, int>> Graph::shortest_path(int v) const {
      * F - 2
      * G - 1
      */
+}
+
+vector<pair<double, int>> Graph::dijkstra(int n) const {
+    vector<pair<double, int>> ret(graph.size(), make_pair(-1, -1));
+
+    auto cmp = [&](const vertex* v1, const vertex* v2){return ret[v1->idx].first < ret[v2->idx].first;};
+    priority_queue<const vertex*, vector<const vertex*>, decltype(cmp)> q(cmp);
+    vector<bool> known(graph.size(), false);
+
+    const vertex* v1 = &(graph[n]);
+    q.push(v1);
+
+    ret[n].first = 0;
+    ret[n].second = n;
+
+    while (!q.empty()) {
+        const vertex* v = q.top();
+        q.pop();
+        if (known[v->idx]) continue;
+
+        known[v->idx] = true;
+
+        for (auto e : v->edges) {
+            const vertex* dest = &(graph[e.dest]);
+                if (!known[dest->idx]) {
+                    q.push(dest);
+                    if (ret[dest->idx].first == -1 || ret[v->idx].first + e.w < ret[dest->idx].first) {
+                        ret[dest->idx].first = ret[v->idx].first + e.w;
+                        ret[dest->idx].second = v->idx;
+                    }
+                }
+        }
+    }
+
+
+
+    return ret;
 }
 
 Graph::edge::edge(int s, int d, double w)

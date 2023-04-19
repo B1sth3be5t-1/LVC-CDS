@@ -23,6 +23,8 @@ public:
 
     void print_rep() const;
 
+    [[nodiscard]] std::vector<std::pair<double, int>> dijkstra(int v) const;
+
 private:
     struct edge {
         int src;

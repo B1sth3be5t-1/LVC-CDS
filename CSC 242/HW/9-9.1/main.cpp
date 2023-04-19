@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "Graph.h"
 
 using namespace std;
@@ -6,36 +7,27 @@ using namespace std;
 int main() {
     Graph g{7, true};
 
-    g.add_edge(0, 1, 10);
-    g.add_edge(0, 2, 10);
-    g.add_edge(0, 3, 10);
-    g.add_edge(1, 3, 10);
+    g.add_edge(0, 1, 2);
+    g.add_edge(0, 3, 1);
+    g.add_edge(1, 3, 3);
     g.add_edge(1, 4, 10);
-    g.add_edge(2, 5, 10);
-    g.add_edge(3, 5, 10);
-    g.add_edge(3, 6, 10);
-    g.add_edge(3, 2, 10);
-    g.add_edge(4, 3, 10);
-    g.add_edge(4, 6, 10);
-    g.add_edge(6, 5, 10);
+    g.add_edge(2, 0, 4);
+    g.add_edge(2, 5, 5);
+    g.add_edge(3, 2, 2);
+    g.add_edge(3, 4, 2);
+    g.add_edge(3, 5, 8);
+    g.add_edge(3, 6, 4);
+    g.add_edge(4, 6, 6);
+    g.add_edge(6, 5, 1);
 
-    g.print_rep();
+    int n = 2;
 
-    cout << endl;
-    vector<int> out = g.out_degree();
-    int c = 0;
-    for (int i : out)
-        cout << "Vertex " << c++ << " is connected out to " << i << " other vertices." << endl;
+    vector<pair<double, int>> dij = g.dijkstra(n);
 
-    cout << endl;
-
-    vector<int> in = g.in_degree();
-    int c2 = 0;
-    for (int i : in)
-        cout << "Vertex " << c2++ << " is connected inwards to " << i << " other vertices." << endl;
-
-    cout << endl;
-
+    int count = 1;
+    for (auto& p : dij) {
+        cout << n+1 << "'s shortest path to " << count++ << " is " << p.first << endl;
+    }
 
 
 
