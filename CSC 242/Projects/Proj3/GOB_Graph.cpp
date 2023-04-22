@@ -104,6 +104,22 @@ vector<pair<string, double>> GOB::influencerRanking() const {
 
     std::sort(ret.begin(), ret.end(), [](pair<string, double> p1, pair<string, double> p2){return p1.second > p2.second;});
     return ret;
+
+    /*
+     * This section discusses the time complexity for influencerRanking().
+     *
+     * For each vertex in the graph (aka |V|), I need to get their score. To get their score,
+     * I determine the shortest path using BFS to every other vertex it is connected to. This takes
+     * O(|E|+|V|), as our graph essentially holds adjacency lists. Each vertex holds a list of edges
+     * connecting to another vertex. Another O(|V|) scan is done, along with several O(1) steps inside.
+     * All together, getting an individual influencer score is O(|E|+|V|). This is done for every vertex
+     * in the graph, meaning we do (|E|+|V|) work for |V| vertices. After this, I need to do another |V|
+     * scan through the map in order to associate the string of the user with their respective score.
+     * I then sort the return vector using std::sort, which is O(NlogN), or O(|V|log|V|). This is less
+     * than |V^2| from calculating the total score for every person, so this can be omitted from the final
+     * O(). The final time complexity is O(|E|*|V|+|V^2|) when we distribute e + v work among v vertices.
+     *                                   ^^^^^^^^^^^^^^^^
+     */
 }
 
 double GOB::get_score(int v) const {
