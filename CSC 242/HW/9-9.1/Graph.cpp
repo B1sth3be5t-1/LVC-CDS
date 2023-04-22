@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Graph.h"
+#include "DisjointSet.h"
 
 using namespace std;
 
@@ -179,6 +180,38 @@ vector<pair<double, int>> Graph::dijkstra(int n) const {
         }
     }
 
+
+
+    return ret;
+}
+
+Graph Graph::kruskal() const {
+    Graph ret(graph.size());
+    vector<unique_ptr<edge>> allEdges;
+    auto cmp = [&](int a, int b){return allEdges[a]->w > allEdges[b]->w;};
+    priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
+    DisjointSet ds{static_cast<int>(graph.size())};
+
+
+    for (vertex v : graph)
+        for (edge e : v.edges)
+            allEdges.push_back(make_unique<edge>(e));
+
+    for (int i = 0; i < allEdges.size(); ++i)
+        pq.push(i);
+
+    int count = 0;
+
+    while (count != graph.size() - 1) {
+        edge* e = allEdges[pq.top()].get();
+        pq.pop();
+
+        if (!ds.same_component(e->src, e->dest)) {
+            ret.add_edge(e->src, e->dest, e->w);
+            ds.join_components(e->src, e->dest);
+            ++count;
+        }
+    }
 
 
     return ret;

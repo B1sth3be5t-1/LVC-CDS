@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    Graph g{7, true};
+    Graph g{7, false};
 
     g.add_edge(0, 1, 2);
     g.add_edge(0, 3, 1);
@@ -14,7 +14,7 @@ int main() {
     g.add_edge(2, 0, 4);
     g.add_edge(2, 5, 5);
     g.add_edge(3, 2, 2);
-    g.add_edge(3, 4, 2);
+    g.add_edge(3, 4, 7);
     g.add_edge(3, 5, 8);
     g.add_edge(3, 6, 4);
     g.add_edge(4, 6, 6);
@@ -29,7 +29,8 @@ int main() {
         cout << n+1 << "'s shortest path to " << count++ << " is " << p.first << endl;
     }
 
+    Graph g2 = g.kruskal();
 
-
+    g2.print_rep();
 
 }

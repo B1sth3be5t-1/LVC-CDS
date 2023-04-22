@@ -7,6 +7,21 @@
 class graph_exception: public std::exception {};
 
 class Graph {
+private:
+    struct edge {
+        int src;
+        int dest;
+        double w;
+
+        edge(int s, int d, double w);
+    };
+    struct vertex {
+        int idx;
+        std::vector<edge> edges;
+
+        explicit vertex(int idx = -1);
+    };
+
 public:
     explicit Graph(int sz, bool is_directed = true);
 
@@ -25,21 +40,7 @@ public:
 
     [[nodiscard]] std::vector<std::pair<double, int>> dijkstra(int v) const;
 
-private:
-    struct edge {
-        int src;
-        int dest;
-        double w;
-
-        edge(int s, int d, double w);
-    };
-
-    struct vertex {
-        int idx;
-        std::vector<edge> edges;
-
-        explicit vertex(int idx = -1);
-    };
+    [[nodiscard]] Graph kruskal() const;
 
 private:
     std::vector<vertex> graph;
