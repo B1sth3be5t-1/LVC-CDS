@@ -1,36 +1,71 @@
 #include <iostream>
 #include <vector>
 #include "Graph.h"
+#include <random>
+#include <chrono>
 
 using namespace std;
 
-int main() {
-    Graph g{7, false};
+Graph gen_graph(int n, int d, bool directed) {
+    static random_device rd;
+    static default_random_engine re(rd());
+    uniform_int_distribution<int> dist(0, n-1);
+    uniform_int_distribution<int> weight(1, 10);
+    Graph ret(n, directed);
 
-    g.add_edge(0, 1, 2);
-    g.add_edge(0, 3, 1);
-    g.add_edge(1, 3, 3);
-    g.add_edge(1, 4, 10);
-    g.add_edge(2, 0, 4);
-    g.add_edge(2, 5, 5);
-    g.add_edge(3, 2, 2);
-    g.add_edge(3, 4, 7);
-    g.add_edge(3, 5, 8);
-    g.add_edge(3, 6, 4);
-    g.add_edge(4, 6, 6);
-    g.add_edge(6, 5, 1);
-
-    int n = 2;
-
-    vector<pair<double, int>> dij = g.dijkstra(n);
-
-    int count = 1;
-    for (auto& p : dij) {
-        cout << n+1 << "'s shortest path to " << count++ << " is " << p.first << endl;
+    for (int i=0; i<n*d; ++i) {
+        auto u = dist(re);
+        auto v = dist(re);
+        auto w = weight(re);
+        ret.add_edge(u, v, w);
     }
 
-    Graph g2 = g.kruskal();
+    return ret;
+}
 
-    g2.print_rep();
+int main() {
+    /*
+    int n = 27000;
+
+    for (int i = 10000; i < n; i*=1.1) {
+        Graph g = gen_graph(i, 2, false);
+        auto start = chrono::system_clock::now();
+        g.DFSIter(0);
+        auto end = chrono::system_clock::now();
+        auto diff = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+        cout << i << " iter took " << diff << "ms and recur took ";
+        start = chrono::system_clock::now();
+        g.DFSRecur(0);
+        end = chrono::system_clock::now();
+        diff = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+        cout << diff << "ms." << endl;
+    }
+
+     */
+
+    /*
+     * for some reason, I'm assuming its space related, my code crashes at about 40,000 node graph
+     * on the recursion. The first few cases show that recursion is certainly faster than the iteration
+     * version. I don't know why I can't test more.
+     */
+
+    Graph g(12, false);
+    g.add_edge(0, 2);
+    g.add_edge(0, 3);
+    g.add_edge(1, 2);
+    g.add_edge(1, 4);
+    g.add_edge(2, 3);
+    g.add_edge(2, 5);
+    g.add_edge(4, 5);
+    g.add_edge(4, 8);
+    g.add_edge(4, 9);
+    g.add_edge(5, 6);
+    g.add_edge(8, 10);
+    g.add_edge(9, 11);
+    g.add_edge(10, 11);
+
+    vector<int> ret = g.get_articulations();
+    for (int i : ret)
+        cout << i << " is an articulation point." << endl;
 
 }

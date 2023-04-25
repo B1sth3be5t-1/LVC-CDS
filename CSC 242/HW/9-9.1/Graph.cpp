@@ -3,6 +3,7 @@
 #include <queue>
 #include <tuple>
 #include <memory>
+#include <algorithm>
 
 #include "Graph.h"
 #include "DisjointSet.h"
@@ -215,6 +216,85 @@ Graph Graph::kruskal() const {
 
 
     return ret;
+}
+
+std::vector<bool> Graph::DFSIter(int i) const {
+    std::vector<bool> ret(graph.size());
+    queue<const vertex*> verts;
+    verts.push(&(graph[i]));
+
+    while (!verts.empty()) {
+        const vertex* v = verts.front();
+        verts.pop();
+        if (ret[v->idx]) continue;
+        else ret[v->idx] = true;
+
+        for (const edge& e : v->edges)
+            verts.push(&(graph[e.dest]));
+    }
+
+
+    return ret;
+}
+
+std::vector<bool> Graph::DFSRecur(int v) const {
+    std::vector<bool> ret(graph.size());
+    dfs(v, ret);
+    return ret;
+}
+
+void Graph::dfs(int v, vector<bool>& lis) const {
+    lis[v] = true;
+    for (const edge e : graph[v].edges){
+        if (!lis[e.dest])
+            dfs(e.dest, lis);
+    }
+}
+
+
+
+vector<int> Graph::get_articulations() const {
+    vector<int> ret;
+    vector<int> num(graph.size());
+    vector<int> low(graph.size());
+    vector<bool> vis(graph.size());
+    vector<int> par(graph.size());
+
+    int count = 1;
+
+    assignNum(0, count, num, vis, par);
+    assignLow(0, num, par, low, ret);
+
+    for (int i = 0; i < num.size(); ++i)
+        cout << "Vertex " << i << "'s num is: " << num[i] << " and low is: " << low[i] << endl;
+
+    if (graph[std::find(num.cbegin(), num.cend(), 0) - num.cbegin() - 1].edges.size() == 1) ret.pop_back();
+    return ret;
+}
+
+void Graph::assignLow(int v, std::vector<int>& num, std::vector<int>& par, vector<int>& low, vector<int>& ret) const{
+    low[v] = num[v];
+    for (const edge& e : graph[v].edges) {
+        if (num[e.dest] > num[e.src]) {
+            assignLow(e.dest, num, par, low, ret);
+            if (low[e.dest] >= num[v] && std::count(ret.cbegin(), ret.cend(), v) == 0)
+                ret.push_back(v);
+            low[v] = min(low[v], low[e.dest]);
+        }
+        else if (par[v] != e.dest)
+            low[v] = min(low[v], num[e.dest]);
+    }
+}
+
+void Graph::assignNum(int v, int& count, vector<int>& lis, vector<bool>& vis, vector<int>& par) const {
+    lis[v] = count++;
+    vis[v] = true;
+    for (const edge& e : graph[v].edges) {
+        if (!vis[e.dest]) {
+            par[e.dest] = v;
+            assignNum(e.dest, count, lis, vis, par);
+        }
+    }
 }
 
 Graph::edge::edge(int s, int d, double w)
