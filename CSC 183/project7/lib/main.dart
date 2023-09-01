@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
+  Bloc.observer = const Observer();
   runApp(const MyApp());
 }
 
@@ -14,20 +16,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.dark(
-        useMaterial3: true,
-      ),
-      home: const AlbumList(),
-      routes: {
-        AlbumList.navroute: (context) => const AlbumList(),
-      },
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData.dark(
+          useMaterial3: true,
+        ),
+        home: BlocProvider(
+          create: (_) => AlbumCubit(),
+          child: const AlbumList(),
+        ));
   }
 }
 
 class AlbumList extends StatefulWidget {
-  static const String navroute = '/main';
   const AlbumList({super.key});
 
   @override
@@ -36,12 +36,6 @@ class AlbumList extends StatefulWidget {
 
 class _AlbumList extends State<AlbumList> {
   final TextEditingController tec = TextEditingController();
-  Widget currWid = const Padding(
-    padding: EdgeInsets.all(8.0),
-    child: Text('Add an album to get started!!'),
-  );
-
-  final Map<int, Album> listAlbum = <int, Album>{};
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +44,11 @@ class _AlbumList extends State<AlbumList> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Json Parser"),
       ),
-      body: currWid,
+      body: BlocBuilder<AlbumCubit, Map<int, Album>>(
+          builder: (context, map) => getList(map)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          fetchAlbum(int.parse(tec.text));
+          context.read<AlbumCubit>().fetchAlbum(int.parse(tec.text), context);
           tec.clear();
         },
         tooltip: 'Get',
@@ -71,39 +66,14 @@ class _AlbumList extends State<AlbumList> {
     );
   }
 
-  void fetchAlbum(int id) async {
-    final response = await http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/$id'));
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      Album a = Album.fromJson(jsonDecode(response.body));
-      setState(() {
-        listAlbum[a.id] = a;
-      });
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                content: Text('That album does not exist'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Ok'),
-                  ),
-                ],
-              ));
+  Widget getList(Map<int, Album> listAlbum) {
+    print('here');
+    if (listAlbum.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text('Add an album to get started!!'),
+      );
     }
-    currWid = ListView(
-      children: getList(),
-    );
-  }
-
-  List<AlbumCard> getList() {
     List<AlbumCard> ret = [];
     for (MapEntry<int, Album> me in listAlbum.entries) {
       Album a = me.value;
@@ -111,7 +81,10 @@ class _AlbumList extends State<AlbumList> {
         a: a,
       ));
     }
-    return ret;
+
+    return ListView(
+      children: ret,
+    );
   }
 }
 
@@ -134,6 +107,15 @@ class AlbumCard extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    context.read<AlbumCubit>().removeAlbum(a.id);
+                  },
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
                 Text(
                   "Album number ${a.id}",
                   style: const TextStyle(
@@ -153,7 +135,7 @@ class AlbumCard extends StatelessWidget {
                       ),
                     );
                   },
-                )
+                ),
               ],
             ),
           ],
@@ -164,7 +146,6 @@ class AlbumCard extends StatelessWidget {
 }
 
 class AlbumScreen extends StatelessWidget {
-  static const String navroute = '/albscreen';
   const AlbumScreen({super.key, required this.a});
 
   final Album a;
@@ -260,5 +241,52 @@ class Album {
       id: json['id'],
       title: json['title'],
     );
+  }
+}
+
+class AlbumCubit extends Cubit<Map<int, Album>> {
+  AlbumCubit() : super({});
+
+  void fetchAlbum(int id, BuildContext context) async {
+    final response = await http
+        .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/$id'));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Album a = Album.fromJson(jsonDecode(response.body));
+      state[a.id] = a;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text('That album does not exist'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    }
+    emit(state);
+  }
+
+  void removeAlbum(int id) {
+    state.remove(id);
+    emit(state);
+  }
+}
+
+class Observer extends BlocObserver {
+  const Observer();
+
+  @override
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
+    super.onChange(bloc, change);
   }
 }
