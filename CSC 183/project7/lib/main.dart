@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  Bloc.observer = const Observer();
   runApp(const MyApp());
 }
 
@@ -15,28 +14,34 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final AlbumCubit ac = AlbumCubit();
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData.dark(
           useMaterial3: true,
         ),
         home: BlocProvider(
-          create: (_) => AlbumCubit(),
-          child: const AlbumList(),
+          create: (_) => ac,
+          child: AlbumList(ac: ac),
         ));
   }
 }
 
 class AlbumList extends StatefulWidget {
-  const AlbumList({super.key});
+  const AlbumList({super.key, required this.ac});
+
+  final AlbumCubit ac;
 
   @override
-  _AlbumList createState() => _AlbumList();
+  _AlbumList createState() => _AlbumList(ac: ac);
 }
 
 class _AlbumList extends State<AlbumList> {
   final TextEditingController tec = TextEditingController();
 
+  _AlbumList({required this.ac});
+
+  final AlbumCubit ac;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,10 +50,15 @@ class _AlbumList extends State<AlbumList> {
         title: const Text("Json Parser"),
       ),
       body: BlocBuilder<AlbumCubit, Map<int, Album>>(
-          builder: (context, map) => getList(map)),
+        bloc: ac,
+        builder: (context, map) => getList(map),
+        buildWhen: (mapold, mapnew) {
+          return mapold.length == mapnew.length;
+        },
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          context.read<AlbumCubit>().fetchAlbum(int.parse(tec.text), context);
+          ac.fetchAlbum(int.parse(tec.text), context);
           tec.clear();
         },
         tooltip: 'Get',
@@ -79,6 +89,7 @@ class _AlbumList extends State<AlbumList> {
       Album a = me.value;
       ret.add(AlbumCard(
         a: a,
+        ac: ac,
       ));
     }
 
@@ -89,9 +100,10 @@ class _AlbumList extends State<AlbumList> {
 }
 
 class AlbumCard extends StatelessWidget {
-  const AlbumCard({super.key, required this.a});
+  const AlbumCard({super.key, required this.a, required this.ac});
 
   final Album a;
+  final AlbumCubit ac;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +122,7 @@ class AlbumCard extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () {
-                    context.read<AlbumCubit>().removeAlbum(a.id);
+                    ac.removeAlbum(a.id);
                   },
                 ),
                 const SizedBox(
@@ -255,6 +267,10 @@ class AlbumCubit extends Cubit<Map<int, Album>> {
       // then parse the JSON.
       Album a = Album.fromJson(jsonDecode(response.body));
       state[a.id] = a;
+      for (MapEntry me in state.entries) {
+        print(me.toString());
+      }
+      emit(state);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -279,14 +295,5 @@ class AlbumCubit extends Cubit<Map<int, Album>> {
   void removeAlbum(int id) {
     state.remove(id);
     emit(state);
-  }
-}
-
-class Observer extends BlocObserver {
-  const Observer();
-
-  @override
-  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    super.onChange(bloc, change);
   }
 }
