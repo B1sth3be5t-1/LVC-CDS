@@ -8,7 +8,8 @@ void main(List<String> args) {
 
   int numShields = int.parse(stdin.readLineSync()!);
 
-  List<Shield> shields = [];
+  List<int> heights = [];
+  List<double> forces = [];
 
   for (int i = 0; i < numShields; i++) {
     String line = stdin.readLineSync()!;
@@ -17,26 +18,29 @@ void main(List<String> args) {
     int end = int.parse(line.split(' ')[1]);
     double force = double.parse(line.split(' ')[2]);
 
-    shields.add(Shield(start: start, end: end, force: force));
+    heights.add(end - start);
+    forces.add(force);
   }
 
-  shields.sort((Shield a, Shield b) => a.start - b.start);
+  double maxGuess = 100000000;
+  double minGuess = -100000000;
 
-  double lastGuess = finx * 1.0 / finy;
+  if (finx >= 0)
+    minGuess = 0;
+  else
+    maxGuess = 0;
+
+  double lastGuess = (maxGuess + minGuess) / 2;
 
   while (true) {
     double positionx = 0;
     double positiony = 0;
 
-    for (Shield s in shields) {
-      if (positiony < s.start) {
-        double dis = s.start - positiony;
-        positionx += (dis * lastGuess);
-        positiony += dis;
-      }
-      positionx += (s.end - s.start) * s.force * lastGuess;
-      positiony += (s.end - s.start);
+    for (int i = 0; i < heights.length; i++) {
+      positionx += heights[i] * forces[i] * lastGuess;
+      positiony += heights[i];
     }
+    ;
 
     if (positiony < finy) {
       positionx += ((finy - positiony) * lastGuess);
@@ -48,11 +52,14 @@ void main(List<String> args) {
       return;
     }
 
-    if (positionx < finx)
-      lastGuess = (lastGuess + (finx - positionx) / 100 * lastGuess);
-    else
-      lastGuess = (lastGuess - (finx - positionx) / 100 * lastGuess);
-  } //todo fix
+    if (positionx < finx) {
+      minGuess = lastGuess;
+      lastGuess = (lastGuess + maxGuess) / 2;
+    } else {
+      maxGuess = lastGuess;
+      lastGuess = (lastGuess + minGuess) / 2;
+    }
+  }
 }
 
 class Shield {
