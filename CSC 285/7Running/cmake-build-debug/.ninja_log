@@ -1,0 +1,7 @@
+# ninja log v5
+5	316	7172071983194973	CMakeFiles/7Running.dir/main.cpp.obj	4e969253397283c8
+4	807	7179100329805500	CMakeFiles/7Running.dir/graph2.cpp.obj	5e8edf6cf23f6561
+8	150	7172072334224451	CMakeFiles/7Running.dir/disjointset.cpp.obj	55f309f4a7334fc
+3	819	7179104061547118	CMakeFiles/7Running.dir/graph.cpp.obj	773e656e30638cbb
+2	145	7187579057558211	build.ninja	1a38019603f9f58
+819	1020	7179104063544108	7Running.exe	8093b10d2f3f2ec5
