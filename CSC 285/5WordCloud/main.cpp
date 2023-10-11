@@ -11,6 +11,9 @@ int best(vector<blok>& blocks, int curBlok, int max_width, int best_height, vect
     int remaining = max_width;
     int cur_line_height = 0;
 
+    if (breakTotals[curBlok] != -1)
+        return breakTotals[curBlok];
+
     best_height = 150 * 5000;
 
     for (int i = curBlok; i < blocks.size(); ++i) {
@@ -18,7 +21,9 @@ int best(vector<blok>& blocks, int curBlok, int max_width, int best_height, vect
         //if blk doesn't fit
         //return best_height
         if (remaining < blk.width)
+        {
             return best_height;
+        }
 
         //add block to line
         //adjust remaining width and line height
@@ -26,7 +31,11 @@ int best(vector<blok>& blocks, int curBlok, int max_width, int best_height, vect
         if (blk.height > cur_line_height) cur_line_height = blk.height;
 
         //BASE CASE
-        if (i == blocks.size() - 1) return cur_line_height;
+        if (i == blocks.size() - 1)
+        {
+            breakTotals[i] = cur_line_height;
+            return cur_line_height;
+        }
 
         //try a line break
         int rest = best(blocks, i + 1, max_width, best_height, breakTotals);
@@ -54,7 +63,7 @@ int main() {
     int maxH = 150 * 5000;
 
     vector<int> breakTotals;
-    breakTotals.assign(5000, -1);
+    breakTotals.assign(numBlocks, -1);
 
     int min_height = best(blocks, 0, width, maxH, breakTotals);
 
