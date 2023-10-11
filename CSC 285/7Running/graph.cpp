@@ -52,12 +52,67 @@ vector<bool> dfs(int start) {
     return reachable;
 }
 
+vector<bool> bfs(int start) {
+    vector<bool> reachable(graph.size(), false);
+
+    queue<int> q;
+    q.push(start);
+    reachable[start] = true;
+
+    while (!q.empty()) {
+        int cur = q.front();
+        q.pop();
+
+        for (const auto& e : graph[cur].edges) {
+            if (! reachable[e.dest]) {
+                q.push(e.dest);
+                reachable[e.dest] = true;
+            }
+        }
+    }
+    return reachable;
+}
+
+vector<int> top_sort() {
+    vector<int> degrees;
+    for (int i=0; i<graph.size(); ++i)
+        degrees.push_back(0);
+
+    for (vertex& v : graph) {
+        for (edge& e : v.edges) {
+            ++degrees[e.dest];
+        }
+    }
+
+    stack<int> guys;
+    for (int i=0; i<degrees.size(); ++i) {
+        if (degrees[i] == 0)
+            guys.push(i);
+    }
+
+    vector<int> ret;
+
+    while (! guys.empty()) {
+        int cur = guys.top(); guys.pop();
+        ret.push_back(cur);
+        for (edge& e : graph[cur].edges) {
+            --degrees[e.dest];
+            if (degrees[e.dest] == 0) {
+                guys.push(e.dest);
+            }
+        }
+    }
+
+    return ret;
+}
 
 
 
 int main() {
     int n;
-    cin >> n;
+    string sn;
+    getline(cin, sn);
+    n = stoi(sn);
 
     vector<pair<string, string>> lis;
     map<string, int> map;
@@ -67,7 +122,9 @@ int main() {
     for (int i = 0; i < n; i++) {
         string s, d;
         string comb;
-        cin >> s >> d;
+        getline(cin, comb);
+        s = comb.substr(0, comb.find(" "));
+        d = comb.substr(comb.find(" ") + 1);
         if (map.find(s) == map.end())
             map[s] = count++;
         if (map.find(d) == map.end())
@@ -79,14 +136,9 @@ int main() {
     string line;
 
     while (getline(cin, line)) {
+        if (line == "/e") break;
         searchList.push_back(line);
     }
-
-    for(std::map<string, int>::iterator it = map.begin(); it != map.end();)
-        if((it->second) == -1)
-            it = map.erase(it);
-        else
-            it++;
 
     for (int i=0; i<map.size(); ++i) {
         graph.push_back(vertex(i));
@@ -100,15 +152,16 @@ int main() {
 
     vector<int> cycles;
 
+    //this loop is wrong. will fix later
+
     for (const auto& v : graph) {
-        vector<bool> bools = dfs(v.idx);
+        vector<bool> bools = bfs(v.idx);
         bool partOfCycle = true;
         for (bool b : bools) if (!b) {partOfCycle = false; break;}
         if (partOfCycle) cycles.push_back(v.idx);
     }
 
     for (string s : searchList) {
-        if (s == "") continue;
         int num = map[s];
         if (std::find(cycles.begin(), cycles.end(), num) != cycles.end()) cout << s << " safe" << endl;
         else cout << s << " trapped" << endl;
