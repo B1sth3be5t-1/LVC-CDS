@@ -7,14 +7,20 @@ struct blok {
     int height;
 };
 
-int best(vector<blok>& blocks, int curBlok, int max_width, int best_height, vector<int>& breakTotals) {
+vector<int> breakTotals;
+
+int best(vector<blok>& blocks, int curBlok, int max_width) {
     int remaining = max_width;
     int cur_line_height = 0;
+
+    //BASE CASE
+    if (curBlok == blocks.size())
+        return 0;
 
     if (breakTotals[curBlok] != -1)
         return breakTotals[curBlok];
 
-    best_height = 150 * 5000;
+    int best_height = 150 * 5000;
 
     for (int i = curBlok; i < blocks.size(); ++i) {
         auto blk = blocks[i];
@@ -22,6 +28,7 @@ int best(vector<blok>& blocks, int curBlok, int max_width, int best_height, vect
         //return best_height
         if (remaining < blk.width)
         {
+            breakTotals[curBlok] = best_height;
             return best_height;
         }
 
@@ -30,19 +37,16 @@ int best(vector<blok>& blocks, int curBlok, int max_width, int best_height, vect
         remaining -= blk.width;
         if (blk.height > cur_line_height) cur_line_height = blk.height;
 
-        //BASE CASE
-        if (i == blocks.size() - 1)
-        {
-            breakTotals[i] = cur_line_height;
-            return cur_line_height;
-        }
 
         //try a line break
-        int rest = best(blocks, i + 1, max_width, best_height, breakTotals);
+        int rest = best(blocks, i + 1, max_width);
         if (rest + cur_line_height < best_height) {
             best_height = rest + cur_line_height;
         }
     }
+
+    breakTotals[curBlok] = best_height;
+    return best_height;
 }
 
 int main() {
@@ -55,17 +59,17 @@ int main() {
 
     numBlocks = stoi(inp.substr(0, inp.find(' ')));
     width = stoi(inp.substr(inp.find(' ') + 1));
+
     for (int i = 0; i < numBlocks; i++) {
         getline(cin, inp);
         blocks.push_back(std::move(blok{stoi(inp.substr(0, inp.find(' '))), stoi(inp.substr(inp.find(' ') + 1))}));
+        //cout << blocks[i].width << ": height: " << blocks[i].height << endl;
     }
 
-    int maxH = 150 * 5000;
 
-    vector<int> breakTotals;
     breakTotals.assign(numBlocks, -1);
 
-    int min_height = best(blocks, 0, width, maxH, breakTotals);
+    int min_height = best(blocks, 0, width);
 
 
     cout << min_height << endl;
