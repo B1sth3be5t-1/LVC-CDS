@@ -36,7 +36,6 @@ vector<bool> dfs(int start) {
     
     stack<int> s;
     s.push(start);
-    reachable[start] = true;
 
     while (!s.empty()) {
         int cur = s.top(); 
@@ -57,7 +56,6 @@ vector<bool> bfs(int start) {
 
     queue<int> q;
     q.push(start);
-    reachable[start] = true;
 
     while (!q.empty()) {
         int cur = q.front();
@@ -73,7 +71,7 @@ vector<bool> bfs(int start) {
     return reachable;
 }
 
-vector<int> top_sort() {
+std::map<int, bool> top_sort() {
     vector<int> degrees;
     for (int i=0; i<graph.size(); ++i)
         degrees.push_back(0);
@@ -84,27 +82,44 @@ vector<int> top_sort() {
         }
     }
 
-    stack<int> guys;
+    queue<int> guys;
     for (int i=0; i<degrees.size(); ++i) {
         if (degrees[i] == 0)
             guys.push(i);
     }
 
-    guys.push(0);
+    if (guys.size() == 0) guys.push(0);
 
-    vector<int> ret;
+    std::map<int, bool> ret;
 
     while (! guys.empty()) {
-        int cur = guys.top(); guys.pop();
-        ret.push_back(cur);
+        int cur = guys.front(); guys.pop();
+
+        vector<bool> bools = dfs(cur);
+        bool canGetToSelf = bools[cur];
+
+        int dup = 0;
+        if (ret.count(cur) != 0)
+            dup++;
+
+        if (ret.count(cur) == 0) {
+            ret[cur] = canGetToSelf;
+            cout << cur << ": canGetToSelf - " << canGetToSelf << endl;
+        }
+
+        int lastDest = 0;
+
         for (edge& e : graph[cur].edges) {
             --degrees[e.dest];
             if (degrees[e.dest] == 0) {
                 guys.push(e.dest);
             }
+            lastDest = e.dest;
         }
-    }
 
+        if (guys.size() == 0 && ret.size() < graph.size() + dup)
+            guys.push(lastDest);
+    }
     return ret;
 }
 
@@ -156,9 +171,9 @@ int main() {
 
     //this loop is wrong. will fix later
 
-    vector<int> order = top_sort();
+    std::map<int, bool> order = top_sort();
 
-    for (int i : order) cout << i << endl;
+
 
     for (string s : searchList) {
         int num = map[s];
@@ -169,16 +184,21 @@ int main() {
 }
 
 /*
- * 6
+ * 12
 Arlington San_Antonio
 San_Antonio Baltimore
 Baltimore New_York
 New_York Dallas
-Dallas Arlington
 Baltimore Arlington
+Pennsylvania San_Antonio
+New_York Zebra
+Zebra Constantinople
+Tennessee Pennsylvania
+Fragment New_York
+Baltimore Fragment
+Constantinople New_York
 San_Antonio
 Baltimore
 New_York
 Dallas
-
  */
