@@ -90,6 +90,8 @@ vector<int> top_sort() {
             guys.push(i);
     }
 
+    guys.push(0);
+
     vector<int> ret;
 
     while (! guys.empty()) {
@@ -154,12 +156,9 @@ int main() {
 
     //this loop is wrong. will fix later
 
-    for (const auto& v : graph) {
-        vector<bool> bools = bfs(v.idx);
-        bool partOfCycle = true;
-        for (bool b : bools) if (!b) {partOfCycle = false; break;}
-        if (partOfCycle) cycles.push_back(v.idx);
-    }
+    vector<int> order = top_sort();
+
+    for (int i : order) cout << i << endl;
 
     for (string s : searchList) {
         int num = map[s];
