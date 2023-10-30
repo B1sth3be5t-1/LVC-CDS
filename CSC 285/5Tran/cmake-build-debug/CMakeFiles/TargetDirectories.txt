@@ -1,0 +1,3 @@
+S:/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 285/5Tran/cmake-build-debug/CMakeFiles/5Tran.dir
+S:/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 285/5Tran/cmake-build-debug/CMakeFiles/edit_cache.dir
+S:/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 285/5Tran/cmake-build-debug/CMakeFiles/rebuild_cache.dir
