@@ -30,10 +30,27 @@ struct vertex {
 
 vector<vertex> graph;
 
+void dfs_recur(int start, vector<bool>& canGetTo, vector<bool>& isActive, bool& cycle) {
+    //mark cur active
+    isActive[start] = true;
+    //for each edge
+    for (const auto& e : graph[start].edges) {
+        //if the edge is already active then we hit a cycle. Break
+        if (isActive[e.dest]) { cycle = true; break;}
+
+        if (!canGetTo[e.dest]) {
+            canGetTo[e.dest] = true;
+            dfs_recur(e.dest, canGetTo, isActive, cycle);
+        }
+    }
+    isActive[start] = false;
+}
 
 bool dfs(int start) {
     //0 is non-explored, 1 is exploring, 2 is finished
     vector<int> reachable(graph.size(), 0);
+
+    //separate feature?
 
     stack<int> s;
     s.push(start);
@@ -45,13 +62,14 @@ bool dfs(int start) {
         reachable[cur] = 1;
 
         for (const auto& e : graph[cur].edges) {
-            if (reachable[e.dest] != 2) {
+            if (e.dest == cur) return true;
+            //if (reachable[e.dest] != 2) {
                 //push here, is in progress
                 if (reachable[e.dest] == 1)
                     return true;
                 s.push(e.dest);
                 reachable[e.dest] = 1;
-            }
+            //}
         }
     }
     return false;
@@ -105,26 +123,39 @@ int main() {
     for (string s : searchList) {
         int num = map[s];
 
-        bool dfss = dfs(num);
+        vector<bool> isActive, canGetTo;
+        isActive.resize(graph.size());
+        canGetTo.resize(graph.size());
+        //bool dfss = dfs(num);
 
-        if (dfss) cout << s << " safe" << endl;
+        bool cycle = false;
+        dfs_recur(num, canGetTo, isActive, cycle);
+
+        if (cycle) cout << s << " safe" << endl;
+        //if (dfss) cout << s << " safe" << endl;
         else cout << s << " trapped" << endl;
     }
+
+
 
 }
 
 /*
- * 13
+ 1
+Test Test
+Test
+*/
+
+/*
+ * 11
 Arlington San_Antonio
 San_Antonio Baltimore
-Baltimore New_York
 New_York Dallas
 Baltimore Arlington
 Pennsylvania San_Antonio
 New_York Zebra
 Zebra Constantinople
 Tennessee Pennsylvania
-Fragment New_York
 Baltimore Fragment
 Constantinople New_York
 Dallas x-ray
