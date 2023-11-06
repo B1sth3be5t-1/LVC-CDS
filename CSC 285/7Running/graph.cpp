@@ -30,99 +30,50 @@ struct vertex {
 
 vector<vertex> graph;
 
+void dfs_recur(int start, vector<bool>& canGetTo, vector<bool>& isActive, bool& cycle) {
+    //mark cur active
+    isActive[start] = true;
+    //for each edge
+    for (const auto& e : graph[start].edges) {
+        //if the edge is already active then we hit a cycle. Break
+        if (isActive[e.dest]) { cycle = true; break;}
 
-vector<bool> dfs(int start) {
-    vector<bool> reachable(graph.size(), false);
-    
+        if (!canGetTo[e.dest]) {
+            canGetTo[e.dest] = true;
+            dfs_recur(e.dest, canGetTo, isActive, cycle);
+        }
+    }
+    isActive[start] = false;
+}
+
+bool dfs(int start) {
+    //0 is non-explored, 1 is exploring, 2 is finished
+    vector<int> reachable(graph.size(), 0);
+
+    //separate feature?
+
     stack<int> s;
     s.push(start);
 
+
     while (!s.empty()) {
-        int cur = s.top(); 
+        int cur = s.top();
         s.pop();
+        reachable[cur] = 1;
 
         for (const auto& e : graph[cur].edges) {
-            if (! reachable[e.dest]) {
+            if (e.dest == cur) return true;
+            //if (reachable[e.dest] != 2) {
+                //push here, is in progress
+                if (reachable[e.dest] == 1)
+                    return true;
                 s.push(e.dest);
-                reachable[e.dest] = true;
-            }
+                reachable[e.dest] = 1;
+            //}
         }
-    }   
-    return reachable;
+    }
+    return false;
 }
-
-vector<bool> bfs(int start) {
-    vector<bool> reachable(graph.size(), false);
-
-    queue<int> q;
-    q.push(start);
-
-    while (!q.empty()) {
-        int cur = q.front();
-        q.pop();
-
-        for (const auto& e : graph[cur].edges) {
-            if (! reachable[e.dest]) {
-                q.push(e.dest);
-                reachable[e.dest] = true;
-            }
-        }
-    }
-    return reachable;
-}
-
-std::map<int, bool> top_sort() {
-    vector<int> degrees;
-    for (int i=0; i<graph.size(); ++i)
-        degrees.push_back(0);
-
-    for (vertex& v : graph) {
-        for (edge& e : v.edges) {
-            ++degrees[e.dest];
-        }
-    }
-
-    queue<int> guys;
-    for (int i=0; i<degrees.size(); ++i) {
-        if (degrees[i] == 0)
-            guys.push(i);
-    }
-
-    if (guys.size() == 0) guys.push(0);
-
-    std::map<int, bool> ret;
-
-    while (! guys.empty()) {
-        int cur = guys.front(); guys.pop();
-
-        vector<bool> bools = dfs(cur);
-        bool canGetToSelf = bools[cur];
-
-        int dup = 0;
-        if (ret.count(cur) != 0)
-            dup++;
-
-        if (ret.count(cur) == 0) {
-            ret[cur] = canGetToSelf;
-            cout << cur << ": canGetToSelf - " << canGetToSelf << endl;
-        }
-
-        int lastDest = 0;
-
-        for (edge& e : graph[cur].edges) {
-            --degrees[e.dest];
-            if (degrees[e.dest] == 0) {
-                guys.push(e.dest);
-            }
-            lastDest = e.dest;
-        }
-
-        if (guys.size() == 0 && ret.size() < graph.size() + dup)
-            guys.push(lastDest);
-    }
-    return ret;
-}
-
 
 
 int main() {
@@ -167,38 +118,55 @@ int main() {
         graph[u].edges.push_back(edge(v, 1));
     }
 
-    vector<int> cycles;
-
-    //this loop is wrong. will fix later
-
-    std::map<int, bool> order = top_sort();
-
 
 
     for (string s : searchList) {
         int num = map[s];
-        if (std::find(cycles.begin(), cycles.end(), num) != cycles.end()) cout << s << " safe" << endl;
+
+        vector<bool> isActive, canGetTo;
+        isActive.resize(graph.size());
+        canGetTo.resize(graph.size());
+        //bool dfss = dfs(num);
+
+        bool cycle = false;
+        dfs_recur(num, canGetTo, isActive, cycle);
+
+        if (cycle) cout << s << " safe" << endl;
+        //if (dfss) cout << s << " safe" << endl;
         else cout << s << " trapped" << endl;
     }
+
+
 
 }
 
 /*
- * 12
+ 1
+Test Test
+Test
+*/
+
+/*
+ * 11
 Arlington San_Antonio
 San_Antonio Baltimore
-Baltimore New_York
 New_York Dallas
 Baltimore Arlington
 Pennsylvania San_Antonio
 New_York Zebra
 Zebra Constantinople
 Tennessee Pennsylvania
-Fragment New_York
 Baltimore Fragment
 Constantinople New_York
-San_Antonio
+Dallas x-ray
+x-ray
+Dallas
+Arlington
+San-Antonio
 Baltimore
 New_York
-Dallas
+Pennsylvania
+Zebra
+Constantinople
+Fragment
  */
