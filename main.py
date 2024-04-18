@@ -30,8 +30,6 @@ from tf_agents.utils import common
 # Set up a virtual display for rendering OpenAI gym environments.
 display = pyvirtualdisplay.Display(visible=True, size=(1400, 900)).start()
 
-print(tf.version.VERSION)
-
 num_iterations = 20000  # @param {type:"integer"}
 
 initial_collect_steps = 100  # @param {type:"integer"}
