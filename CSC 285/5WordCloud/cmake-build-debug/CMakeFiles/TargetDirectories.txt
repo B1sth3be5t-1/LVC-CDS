@@ -1,0 +1,3 @@
+/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 285/5WordCloud/cmake-build-debug/CMakeFiles/5WordCloud.dir
+/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 285/5WordCloud/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/LVC/bjm008/CLionProjects/LVC-CDS/CSC 285/5WordCloud/cmake-build-debug/CMakeFiles/rebuild_cache.dir

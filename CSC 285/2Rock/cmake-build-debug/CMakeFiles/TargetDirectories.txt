@@ -1,0 +1,3 @@
+S:/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 285/2Rock/cmake-build-debug/CMakeFiles/2Rock.dir
+S:/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 285/2Rock/cmake-build-debug/CMakeFiles/edit_cache.dir
+S:/OneDrive - Lebanon Valley College/LVC work/CDS work/LVC-CDS/CSC 285/2Rock/cmake-build-debug/CMakeFiles/rebuild_cache.dir
