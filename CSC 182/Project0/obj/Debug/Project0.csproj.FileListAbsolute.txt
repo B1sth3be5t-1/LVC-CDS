@@ -1,0 +1,7 @@
+C:\Users\Brian Myers\source\repos\B1sth3be5t-1\LVC-CDS\CSC 182\Project0\bin\Debug\Project0.exe.config
+C:\Users\Brian Myers\source\repos\B1sth3be5t-1\LVC-CDS\CSC 182\Project0\bin\Debug\Project0.exe
+C:\Users\Brian Myers\source\repos\B1sth3be5t-1\LVC-CDS\CSC 182\Project0\bin\Debug\Project0.pdb
+C:\Users\Brian Myers\source\repos\B1sth3be5t-1\LVC-CDS\CSC 182\Project0\obj\Debug\Project0.csproj.AssemblyReference.cache
+C:\Users\Brian Myers\source\repos\B1sth3be5t-1\LVC-CDS\CSC 182\Project0\obj\Debug\Project0.csproj.CoreCompileInputs.cache
+C:\Users\Brian Myers\source\repos\B1sth3be5t-1\LVC-CDS\CSC 182\Project0\obj\Debug\Project0.exe
+C:\Users\Brian Myers\source\repos\B1sth3be5t-1\LVC-CDS\CSC 182\Project0\obj\Debug\Project0.pdb
