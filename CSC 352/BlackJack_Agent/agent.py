@@ -1,18 +1,38 @@
 class BlackJackAgentTerrible:
 
     def __init__(self):
-        Q = {((0, 2, 0), "hit"): 0, ((0, 2, 0), "hold"): 0,
-             ((0, 3, 0), "hit"): 0, ((0, 3, 0), "hold"): 0, }  # etc
-        N_sa = {}
-        s = None
-        a = None
+        self.Q = {((0, 2, 0), "hit"): 0, ((0, 2, 0), "hold"): 0,
+                  ((0, 3, 0), "hit"): 0, ((0, 3, 0), "hold"): 0, }  # etc
+        self.N_sa = {}
+        self.s = {'player_total': 0, 'has_ace': False,
+                  'dealer_card': 0, 'state_of_game': 'continue',
+                  'reward': 0}
+        self.a = None
 
-    def decide_action(self, percept):
-        player_total, dealer_card, num_aces = percept
+    def get_percept(self, percept):
+        player_total, has_ace, dealer_card, state_of_game, reward = percept
 
-        s = (player_total, dealer_card, num_aces)
-        if player_total <= 18:
+        self.s = {'player_total': player_total, 'has_ace': has_ace,
+                  'dealer_card': dealer_card, 'state_of_game': state_of_game,
+                  'reward': reward}
+
+        # todo in other class: stuff with rewards and updating
+
+    def show_percept(self):
+        print(self.s)
+
+    def decide_action(self):
+        if self.s['player_total'] <= 18:
             a = "hit"
-        else:
+        elif self.s['state_of_game'] not in ['win', 'lose']:
             a = "hold"
+        else:
+            a = None
         return a
+
+
+class BlackJackAgentLearned:
+    def __init__(self):
+        self.Q = {}
+
+# a' = argmax of a' (Q(s', a')) with probability p, do other action with probability 1-p

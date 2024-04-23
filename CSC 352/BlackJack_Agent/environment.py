@@ -1,46 +1,84 @@
 from deck import Deck
 
+
 class BlackjackEnvironment:
     def __init__(self):
         self.deck = Deck()
         self.player_hand = []
         self.dealer_hand = []
+        self.last_agent_action = None
         self.reset()
 
     def reset(self):
+        self.deck = Deck()
+        self.deck.populate()
         self.deck.shuffle()
         self.player_hand = [self.deck.draw(), self.deck.draw()]
         self.dealer_hand = [self.deck.draw()]
+        self.last_agent_action = 'None'
 
+    # to get a state
+    # Sum total of agent hand (with aces as ones), is there an ace in the hand, dealer card, win/lose/continue
+    # this gets sent to the agent
     def get_percept(self):
-        return get_hand_value(self.player_hand), get_hand_value(self.dealer_hand), sum(1 for card in self.player_hand if card.rank == "Ace")
+        # if the player has an ace in their hand
+        has_ace = True if sum(1 for card in self.player_hand if card.rank == "Ace") >= 1 else False
 
-    def step(self, action):
-        if action == 'hit':
-            self.player_hand.append(self.deck.draw())
-            player_total = get_hand_value(self.player_hand)
-            if player_total > 21:
-                return -1, True  # Player busted
+        # is the game still going?
+        if get_hand_value(self.player_hand) > 21:
+            game_status = "lose"
+        elif get_hand_value(self.dealer_hand) > 21 and self.last_agent_action == "hold":
+            game_status = "win"
+        elif self.last_agent_action == "hold":
+            if get_hand_value(self.player_hand) > get_hand_value(self.dealer_hand):
+                game_status = "win"
             else:
-                return 0, False  # Player didn't bust
-        elif action == 'hold':
-            while get_hand_value(self.dealer_hand) < 17:
-                self.dealer_hand.append(self.deck.draw())
-            dealer_total = get_hand_value(self.dealer_hand)
-            player_total = get_hand_value(self.player_hand)
-            if dealer_total > 21 or dealer_total < player_total:
-                return 1, True  # Player wins
-            elif dealer_total > player_total:
-                return -1, True  # Dealer wins
-            else:
-                return 0, True  # Tie
+                game_status = "lose"
+        else:
+            game_status = "continue"
+
+        if game_status == "win":
+            rewards = 1
+        elif game_status == "continue":
+            rewards = 0
+        else:
+            rewards = -1
+        return (get_hand_value(self.player_hand), has_ace,
+                get_hand_value(self.dealer_hand), game_status,
+                rewards)
+
+    def run_game(self, agent):
+        self.reset()
+
+        action = 'init'
+        while action is not None:
+            agent.get_percept(self.get_percept())
+            action = agent.decide_action()
+            if action == 'hit':
+                self.player_hand.append(self.deck.draw())
+                player_total = get_hand_value(self.player_hand)
+                if player_total > 21:
+                    agent.get_percept(self.get_percept())
+                    return -1  # Player busted
+            elif action == "hold":
+                while get_hand_value(self.dealer_hand) < 17:
+                    self.dealer_hand.append(self.deck.draw())
+                dealer_total = get_hand_value(self.dealer_hand)
+                player_total = get_hand_value(self.player_hand)
+                if dealer_total > 21 or dealer_total < player_total:
+                    agent.get_percept(self.get_percept())
+                    return 1  # Player wins
+                elif dealer_total > player_total:
+                    agent.get_percept(self.get_percept())
+                    return -1  # Dealer wins
+                else:
+                    agent.get_percept(self.get_percept())
+                    return 0  # Tie
 
 
 def get_hand_value(hand):
     num_aces = sum(1 for card in hand if card.rank == "Ace")
-    s = 0
-    if num_aces > 1:
-        s += 11 + num_aces - 1
+    s = 11 * num_aces
 
     for card in hand:
         if card.rank in ['Jack', 'Queen', 'King']:
@@ -50,5 +88,8 @@ def get_hand_value(hand):
         else:
             s += int(card.rank)
 
-    return s
+    while s > 21 and num_aces > 0:
+        s -= 10
+        num_aces -= 1
 
+    return s
