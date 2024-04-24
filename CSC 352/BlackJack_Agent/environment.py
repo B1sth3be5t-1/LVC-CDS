@@ -25,24 +25,33 @@ class BlackjackEnvironment:
         has_ace = True if sum(1 for card in self.player_hand if card.rank == "Ace") >= 1 else False
 
         # is the game still going?
-        if get_hand_value(self.player_hand) > 21:
-            game_status = "lose"
-        elif get_hand_value(self.dealer_hand) > 21 and self.last_agent_action == "hold":
+
+        if get_hand_value(self.player_hand) == 21:
             game_status = "win"
+        elif get_hand_value(self.dealer_hand) > 21:
+            game_status = "win"
+        elif get_hand_value(self.player_hand) > 21:
+            game_status = "lose"
         elif self.last_agent_action == "hold":
-            if get_hand_value(self.player_hand) > get_hand_value(self.dealer_hand):
+            if (get_hand_value(self.player_hand) > get_hand_value(self.dealer_hand)
+                    or get_hand_value(self.dealer_hand) > 21):
                 game_status = "win"
             else:
                 game_status = "lose"
         else:
+            print('player total: ' + str(get_hand_value(self.player_hand)))
+            print('dealer total: ' + str(get_hand_value(self.dealer_hand)))
+            print('-------------')
             game_status = "continue"
 
+        # get rewards based on condition of game
         if game_status == "win":
             rewards = 1
         elif game_status == "continue":
             rewards = 0
         else:
             rewards = -1
+
         return (get_hand_value(self.player_hand), has_ace,
                 get_hand_value(self.dealer_hand), game_status,
                 rewards)
@@ -52,13 +61,12 @@ class BlackjackEnvironment:
 
         action = 'init'
         while action is not None:
-            agent.get_percept(self.get_percept())
-            action = agent.decide_action()
+            action = agent.decide_action(self.get_percept())
             if action == 'hit':
                 self.player_hand.append(self.deck.draw())
                 player_total = get_hand_value(self.player_hand)
                 if player_total > 21:
-                    agent.get_percept(self.get_percept())
+                    agent.decide_action(self.get_percept())
                     return -1  # Player busted
             elif action == "hold":
                 while get_hand_value(self.dealer_hand) < 17:
@@ -66,13 +74,13 @@ class BlackjackEnvironment:
                 dealer_total = get_hand_value(self.dealer_hand)
                 player_total = get_hand_value(self.player_hand)
                 if dealer_total > 21 or dealer_total < player_total:
-                    agent.get_percept(self.get_percept())
+                    agent.decide_action(self.get_percept())
                     return 1  # Player wins
                 elif dealer_total > player_total:
-                    agent.get_percept(self.get_percept())
+                    agent.decide_action(self.get_percept())
                     return -1  # Dealer wins
                 else:
-                    agent.get_percept(self.get_percept())
+                    agent.decide_action(self.get_percept())
                     return 0  # Tie
 
 

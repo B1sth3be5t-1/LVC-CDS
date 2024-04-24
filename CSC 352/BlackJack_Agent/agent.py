@@ -9,26 +9,24 @@ class BlackJackAgentTerrible:
                   'reward': 0}
         self.a = None
 
-    def get_percept(self, percept):
-        player_total, has_ace, dealer_card, state_of_game, reward = percept
-
-        self.s = {'player_total': player_total, 'has_ace': has_ace,
-                  'dealer_card': dealer_card, 'state_of_game': state_of_game,
-                  'reward': reward}
-
         # todo in other class: stuff with rewards and updating
 
     def show_percept(self):
         print(self.s)
 
-    def decide_action(self):
+    def decide_action(self, percept):
+        player_total, has_ace, dealer_card, state_of_game, reward = percept
+
+        self.s = {'player_total': player_total, 'has_ace': has_ace,
+                  'dealer_card': dealer_card, 'state_of_game': state_of_game,
+                  'reward': reward}
         if self.s['player_total'] <= 18:
-            a = "hit"
+            self.a = "hit"
         elif self.s['state_of_game'] not in ['win', 'lose']:
-            a = "hold"
+            self.a = "hold"
         else:
-            a = None
-        return a
+            self.a = None
+        return self.a
 
 
 class BlackJackAgentLearned:
