@@ -36,6 +36,8 @@ class BlackjackEnvironment:
             if (get_hand_value(self.player_hand) > get_hand_value(self.dealer_hand)
                     or get_hand_value(self.dealer_hand) > 21):
                 game_status = "win"
+            elif get_hand_value(self.player_hand) == get_hand_value(self.dealer_hand) and get_hand_value(self.dealer_hand) != 21:
+                game_status = "tie"
             else:
                 game_status = "lose"
         else:
@@ -44,7 +46,7 @@ class BlackjackEnvironment:
         # get rewards based on condition of game
         if game_status == "win":
             rewards = 1
-        elif game_status == "continue":
+        elif game_status == "continue" or game_status == "tie":
             rewards = 0
         else:
             rewards = -1
