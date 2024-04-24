@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project4_Console_app\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B99D832D-2466-4867-9BDB-02F1DF3304E9}|Project4_Console_app\\Project4_Console_app.csproj|c:\\users\\dasd\\development\\lvc-cds\\csc 182\\project4_console_app\\project4_console_app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B99D832D-2466-4867-9BDB-02F1DF3304E9}|Project4_Console_app\\Project4_Console_app.csproj|solutionrelative:project4_console_app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B99D832D-2466-4867-9BDB-02F1DF3304E9}|Project4_Console_app\\Project4_Console_app.csproj|c:\\users\\dasd\\development\\lvc-cds\\csc 182\\project4_console_app\\project4_console_app\\playingcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B99D832D-2466-4867-9BDB-02F1DF3304E9}|Project4_Console_app\\Project4_Console_app.csproj|solutionrelative:project4_console_app\\playingcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayingCard.cs",
+              "DocumentMoniker": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project4_Console_app\\Project4_Console_app\\PlayingCard.cs",
+              "RelativeDocumentMoniker": "Project4_Console_app\\PlayingCard.cs",
+              "ToolTip": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project4_Console_app\\Project4_Console_app\\PlayingCard.cs",
+              "RelativeToolTip": "Project4_Console_app\\PlayingCard.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAkwCIAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-24T17:18:21.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project4_Console_app\\Project4_Console_app\\Program.cs",
+              "RelativeDocumentMoniker": "Project4_Console_app\\Program.cs",
+              "ToolTip": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project4_Console_app\\Project4_Console_app\\Program.cs",
+              "RelativeToolTip": "Project4_Console_app\\Program.cs",
+              "ViewState": "AQIAACkAAAAAAAAAAAAUwEEAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-23T22:45:49.333Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

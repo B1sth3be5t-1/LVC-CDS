@@ -1,0 +1,7 @@
+C:\Users\dasd\Development\LVC-CDS\CSC 182\Project4_Console_app\Project4_Console_app\bin\Debug\Project4_Console_app.exe.config
+C:\Users\dasd\Development\LVC-CDS\CSC 182\Project4_Console_app\Project4_Console_app\bin\Debug\Project4_Console_app.exe
+C:\Users\dasd\Development\LVC-CDS\CSC 182\Project4_Console_app\Project4_Console_app\bin\Debug\Project4_Console_app.pdb
+C:\Users\dasd\Development\LVC-CDS\CSC 182\Project4_Console_app\Project4_Console_app\obj\Debug\Project4_Console_app.csproj.AssemblyReference.cache
+C:\Users\dasd\Development\LVC-CDS\CSC 182\Project4_Console_app\Project4_Console_app\obj\Debug\Project4_Console_app.csproj.CoreCompileInputs.cache
+C:\Users\dasd\Development\LVC-CDS\CSC 182\Project4_Console_app\Project4_Console_app\obj\Debug\Project4_Console_app.exe
+C:\Users\dasd\Development\LVC-CDS\CSC 182\Project4_Console_app\Project4_Console_app\obj\Debug\Project4_Console_app.pdb
