@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|c:\\users\\dasd\\development\\lvc-cds\\csc 182\\project6_7\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|c:\\users\\dasd\\development\\lvc-cds\\csc 182\\project6_7\\eventshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|solutionrelative:eventshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|c:\\users\\dasd\\development\\lvc-cds\\csc 182\\project6_7\\calculator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|solutionrelative:calculator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|c:\\users\\dasd\\development\\lvc-cds\\csc 182\\project6_7\\bankingsimulator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D288FB1C-8265-411D-8463-435A80DBD807}|Project6_7.csproj|solutionrelative:bankingsimulator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EventsHandler.cs",
+              "DocumentMoniker": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\EventsHandler.cs",
+              "RelativeDocumentMoniker": "EventsHandler.cs",
+              "ToolTip": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\EventsHandler.cs",
+              "RelativeToolTip": "EventsHandler.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAcwCMAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-26T18:48:43.69Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-25T17:02:48.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BankingSimulator.cs",
+              "DocumentMoniker": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\BankingSimulator.cs",
+              "RelativeDocumentMoniker": "BankingSimulator.cs",
+              "ToolTip": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\BankingSimulator.cs",
+              "RelativeToolTip": "BankingSimulator.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACgAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-25T17:19:56.372Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Calculator.cs",
+              "DocumentMoniker": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\Calculator.cs",
+              "RelativeDocumentMoniker": "Calculator.cs",
+              "ToolTip": "C:\\Users\\dasd\\Development\\LVC-CDS\\CSC 182\\Project6_7\\Calculator.cs",
+              "RelativeToolTip": "Calculator.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAADgAAAA+AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-25T17:19:22.536Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
