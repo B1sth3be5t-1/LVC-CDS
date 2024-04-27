@@ -1,12 +1,11 @@
 from deck import Deck
 from card import Card
-from agent import BlackJackAgentTerrible
+from agent import BlackJackAgentTerrible, BlackJackAgentLearned
 from environment import BlackjackEnvironment
 
-for _ in range(20):
+agent = BlackJackAgentLearned()
+for _ in range(600000):
     env = BlackjackEnvironment()
-    agent = BlackJackAgentTerrible()
     res = env.run_game(agent)
-    print(res)
-    agent.show_percept()
-    print()
+
+print(agent.Q)
