@@ -32,7 +32,7 @@ class BlackjackEnvironment:
             game_status = "win"
         elif get_hand_value(self.player_hand) > 21:
             game_status = "lose"
-        elif self.last_agent_action == "None" or self.last_agent_action is None:
+        elif self.last_agent_action != 'None':
             if (get_hand_value(self.player_hand) > get_hand_value(self.dealer_hand)
                     or get_hand_value(self.dealer_hand) > 21):
                 game_status = "win"

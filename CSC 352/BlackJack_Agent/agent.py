@@ -76,20 +76,20 @@ class BlackJackAgentLearned:
 
         action_val = max(self.Q[tupPrimeHold], self.Q[tupPrimeHold])
 
-        if self.Q[tupPrimeHold] == action_val:
-            # this means that we chose the action to hold
-            rand = random.randrange(1, 11)
-            if rand < 9:
-                self.a = "hold"
-            else:
-                self.a = "hit"
-        else:
+        if self.Q[tupPrimeHit] == action_val:
             # this means that we chose the action to hit
             rand = random.randrange(1, 11)
             if rand < 9:
                 self.a = "hit"
             else:
                 self.a = "hold"
+        else:
+            # this means that we chose the action to hold
+            rand = random.randrange(1, 11)
+            if rand < 9:
+                self.a = "hold"
+            else:
+                self.a = "hit"
 
         return self.a
 
