@@ -1,4 +1,6 @@
 import random
+import pickle
+
 
 class BlackJackAgentTerrible:
 
@@ -10,8 +12,6 @@ class BlackJackAgentTerrible:
                   'dealer_card': 0, 'state_of_game': 'continue',
                   'reward': 0}
         self.a = None
-
-        # todo in other class: stuff with rewards and updating
 
     def show_percept(self):
         print(self.s)
@@ -43,13 +43,11 @@ class BlackJackAgentLearned:
                     for action in ["hit", "hold"]:
                         tupQ = (p, ace, d, action)
                         self.Q[tupQ] = 0.0
-                        self.N_sa[tupQ] = 0.0
+                        self.N_sa[tupQ] = 0
         self.s = None
-        self.lastR = 0.0
         self.a = None
         self.prob = .8
-        self.steps = 0
-        self.gamma = .9
+        self.gamma = 1
 
     def show_percept(self):
         print(self.s)
@@ -63,13 +61,15 @@ class BlackJackAgentLearned:
         if self.s is not None:
             tupQ = (self.s['player_total'], self.s['has_ace'], self.s['dealer_card'], self.a)
 
-            self.steps += 1
-
             self.N_sa[tupQ] += 1
 
-            self.Q[tupQ] = (self.Q[tupQ] +
-                            1/(1 + self.steps) * (self.N_sa[tupQ]) *
-                            reward + self.gamma * max(self.Q[tupPrimeHit], self.Q[tupPrimeHold]) - self.Q[tupQ])
+            alpha = (1000 / (1000 + self.N_sa[tupQ]))
+            maxStuff = max(self.Q[tupPrimeHit], self.Q[tupPrimeHold])
+            selfTupNum = self.Q[tupQ]
+            calc = (alpha *
+                             (reward + (self.gamma * maxStuff) - selfTupNum))
+
+            self.Q[tupQ] += calc
 
         self.s = {'player_total': player_total, 'has_ace': has_ace,
                   'dealer_card': dealer_card}
@@ -92,5 +92,27 @@ class BlackJackAgentLearned:
                 self.a = "hit"
 
         return self.a
+
+    def saveQ(self):
+        with open('pickleQ.pkl', 'wb') as f:
+            pickle.dump(self.Q, f)
+        f.close()
+
+        with open('pickleNSA.pkl', 'wb') as f2:
+            pickle.dump(self.N_sa, f2)
+        f2.close()
+
+
+    def loadQ(self):
+        with open('pickleQ.pkl', 'rb') as f:
+            self.Q = pickle.load(f)
+        f.close()
+
+        with open('pickleNSA.pkl', 'rb') as f2:
+            self.N_sa = pickle.load(f2)
+        f2.close()
+
+    def resetState(self):
+        self.s = None
 
 # a' = argmax of a' (Q(s', a')) with probability p, do other action with probability 1-p

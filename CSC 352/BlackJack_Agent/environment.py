@@ -32,7 +32,7 @@ class BlackjackEnvironment:
             game_status = "win"
         elif get_hand_value(self.player_hand) > 21:
             game_status = "lose"
-        elif self.last_agent_action != 'None':
+        elif self.last_agent_action == 'hold':
             if (get_hand_value(self.player_hand) > get_hand_value(self.dealer_hand)
                     or get_hand_value(self.dealer_hand) > 21):
                 game_status = "win"
@@ -57,17 +57,18 @@ class BlackjackEnvironment:
 
     def run_game(self, agent):
         self.reset()
+        agent.resetState()
 
-        action = 'init'
-        while action is not None:
-            action = agent.decide_action(self.get_percept())
-            if action == 'hit':
+        self.last_agent_action = 'init'
+        while self.last_agent_action is not None:
+            self.last_agent_action = agent.decide_action(self.get_percept())
+            if self.last_agent_action == 'hit':
                 self.player_hand.append(self.deck.draw())
                 player_total = get_hand_value(self.player_hand)
                 if player_total > 21:
                     agent.decide_action(self.get_percept())
                     return -1  # Player busted
-            elif action == "hold" or action is None:
+            elif self.last_agent_action == "hold" or self.last_agent_action is None:
                 while get_hand_value(self.dealer_hand) < 17:
                     self.dealer_hand.append(self.deck.draw())
                 dealer_total = get_hand_value(self.dealer_hand)
