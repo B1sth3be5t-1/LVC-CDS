@@ -30,6 +30,9 @@ class BlackJackAgentTerrible:
             self.a = None
         return self.a
 
+    def resetState(self):
+        self.s = None
+
 
 class BlackJackAgentLearned:
 

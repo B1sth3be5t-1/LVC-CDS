@@ -45,7 +45,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/LVC/bjm008/Documents/LVC-CDS/CSC 352/BigAIProject",
+    "last_opened_file_path": "/home/LVC/bjm008/Documents/LVC-CDS/CSC 352/BlackJack_Agent",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -80,6 +80,7 @@
       <updated>1713378001971</updated>
       <workItem from="1713378005824" duration="1533000" />
       <workItem from="1713645503817" duration="20000" />
+      <workItem from="1714586764646" duration="53000" />
     </task>
     <task id="LOCAL-00001" summary="BigAIProject Stuff">
       <option name="closed" value="true" />
