@@ -96,17 +96,19 @@ class BlackJackAgentLearned:
 
         return self.a
 
-    def saveQ(self):
-        with open('pickleQ.pkl', 'wb') as f:
+    def saveQ(self, name):
+        newName = name + 'Q.pkl'
+        with open(newName, 'wb') as f:
             pickle.dump(self.Q, f)
         f.close()
 
-        with open('pickleNSA.pkl', 'wb') as f2:
+        newName = name + 'NSA.pkl'
+        with open(newName, 'wb') as f2:
             pickle.dump(self.N_sa, f2)
         f2.close()
 
 
-    def loadQ(self):
+    def loadQ(self, name):
         with open('pickleQ.pkl', 'rb') as f:
             self.Q = pickle.load(f)
         f.close()

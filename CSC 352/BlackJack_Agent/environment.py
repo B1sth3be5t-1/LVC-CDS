@@ -1,4 +1,5 @@
 from deck import Deck
+from card import Card
 
 
 class BlackjackEnvironment:
@@ -36,7 +37,8 @@ class BlackjackEnvironment:
             if (get_hand_value(self.player_hand) > get_hand_value(self.dealer_hand)
                     or get_hand_value(self.dealer_hand) > 21):
                 game_status = "win"
-            elif get_hand_value(self.player_hand) == get_hand_value(self.dealer_hand) and get_hand_value(self.dealer_hand) != 21:
+            elif get_hand_value(self.player_hand) == get_hand_value(self.dealer_hand) and get_hand_value(
+                    self.dealer_hand) != 21:
                 game_status = "tie"
             else:
                 game_status = "lose"
@@ -57,6 +59,46 @@ class BlackjackEnvironment:
 
     def run_game(self, agent):
         self.reset()
+        agent.resetState()
+
+        self.last_agent_action = 'init'
+        while self.last_agent_action is not None:
+            self.last_agent_action = agent.decide_action(self.get_percept())
+            if self.last_agent_action == 'hit':
+                self.player_hand.append(self.deck.draw())
+                player_total = get_hand_value(self.player_hand)
+                if player_total > 21:
+                    agent.decide_action(self.get_percept())
+                    return -1  # Player busted
+            elif self.last_agent_action == "hold" or self.last_agent_action is None:
+                while get_hand_value(self.dealer_hand) < 17:
+                    self.dealer_hand.append(self.deck.draw())
+                dealer_total = get_hand_value(self.dealer_hand)
+                player_total = get_hand_value(self.player_hand)
+                if dealer_total > 21 or dealer_total < player_total:
+                    agent.decide_action(self.get_percept())
+                    return 1  # Player wins
+                elif dealer_total > player_total:
+                    agent.decide_action(self.get_percept())
+                    return -1  # Dealer wins
+                else:
+                    agent.decide_action(self.get_percept())
+                    return 0  # Tie
+
+    def run_game_strategic(self, agent, player_tot_init, dealer_tot_init):
+        self.deck = Deck()
+        self.player_hand = []
+        self.dealer_hand = []
+        self.last_agent_action = None
+
+        if player_tot_init >= 11:
+            self.player_hand.append(Card('Hearts', '10'))
+            self.player_hand.append(Card('Hearts', str(player_tot_init - 10)))
+        else:
+            self.player_hand.append(Card('Hearts', str(player_tot_init)))
+
+        self.dealer_hand.append(Card('Hearts', str(dealer_tot_init)))
+
         agent.resetState()
 
         self.last_agent_action = 'init'
