@@ -1,47 +1,48 @@
-import pandas as ps
-import pycountry
-import pgeocode
+from clean_data import *
 
-print("hello world")
+# get all 3 years worth of csv's
 
-data = ps.read_csv("CSV_Files/fall-2022-noaddr.csv")
+data2021 = load("CSV_Files/fall-2021-noaddr.csv")
+data2022 = load("CSV_Files/fall-2022-noaddr.csv")
+data2023 = load("CSV_Files/fall-2023-noaddr.csv")
 
-# read in some column data for zips and country codes
-zip_col = data['ZIP']
-international_col = data['INTERNATIONAL']
-country_col = data['COUNTRY']
+# makes 3 files with the converted days before May 1
+data2021 = convert_dates_to_days_before_may1(data2021, 2021)
+data2022 = convert_dates_to_days_before_may1(data2022, 2022)
+data2023 = convert_dates_to_days_before_may1(data2023, 2023)
 
-# Some items in COUNTRY use two-character indicators, while
-# some others use a full country name. We'll run the country name
-# ones through
-print(set(country_col))
+# the 2022 and 23 data sets have a first_gen_any_source column that 2021 doesn't have, so we have to remove it
+data2022.drop('First_Gen_Any_Source', axis=1, inplace=True)
+data2023.drop('First_Gen_Any_Source', axis=1, inplace=True)
 
-# Remove trailing -00000 and region-specific codes
-stripped_zips = map(lambda s: str(s)[:min(5, len(str(s)))], zip_col)
+# now we stitch the datasets together into one big file
+df = pd.concat([data2021, data2022, data2023], axis=0)
 
-country_col = country_col.map(lambda c: str(c))
+# create a list of the visit columns
+visit_columns = [f'ON_SITE_VISIT_ATTENDED{i}' for i in range(1, 11)]
+visit_df = df[visit_columns]
 
-count = 0
-new_countries = []
-for c in country_col:
-    if c == "nan":
-        country = pycountry.countries.get(alpha_2="us")
-    elif len(c) == 2:
-        country = pycountry.countries.get(alpha_2=c)
-    else:
-        country = pycountry.countries.search_fuzzy(c)[0]
-    count += 1
-    new_countries.append(country.alpha_2)
+# get number of visits
+df = visits_attended(df)
 
+# # get distances from Annville to zip codes
+# df = getDistances(df)
 
-# for s in set(new_countries):
-    # print(s)
+# set majors for students
+columns = ["MAJOR_INTENDED1"]
+df, key = convert_to_ordinal(df, ["MAJOR_INTENDED1"])
 
-coords = []
-for country_code, postal_code in zip(new_countries, stripped_zips):
-    nomi = pgeocode.Nominatim(country_code)
-    postal_code_info = nomi.query_postal_code(postal_code)
-    coords.append([postal_code_info.latitude, postal_code_info.longitude])
+# get counts of extracurriculars
+df = extra_curriculars(df)
 
-annville = [[40.32927, -76.51553]] * len(new_countries)
-distances_km = pgeocode.haversine_distance(annville, coords)
+# aggregate total scholarship amount
+df = sum_scholarship(df)
+
+df = remove_columns(df, def_remove)
+df = remove_columns(df, prob_remove)
+df = remove_columns(df, unknown_remove)
+
+# writes the data to an Excel file, easier to filter and view this way
+datatoExcel = pd.ExcelWriter('allRows.xlsx')
+df.to_excel(datatoExcel)
+datatoExcel.close()
